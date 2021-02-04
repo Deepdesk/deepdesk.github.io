@@ -17,7 +17,10 @@
         The <a href="https://chrome.google.com/webstore/detail/deepdesk/hjdmbhjhcbljokakbbpcnjeoppohgeke" target="_blank">Deepdesk Chrome Extension</a> empowers agents with AI by giving real-time suggestions above the agent's input field during a conversation.
     </p>
 
+    <br />
     <img src="image.png" alt="Example of Deepdesk Chrome Extension in use" />
+    <br />
+    <br />
 
     <p>
         In order to function properly the Deepdesk Chrome Extension (herein after, plugin) needs the following information:
@@ -137,8 +140,10 @@
         When a conversation is done rendering in the DOM, we suggest the platform to emit a CustomEvent named 'ConversationLoaded' on the <code>document</code> with the following payload:
 
         <pre>const event = new CustomEvent('ConversationLoaded', {
-    conversationId: "XXXXXXXX", // conversation ID
-    inputElementId: "YYYY", // element id of the textarea or contenteditable div
+    detail: {
+        conversationId: "XXXXXXXX", // conversation ID
+        inputElementId: "YYYY", // element id of the textarea or contenteditable div
+    }
 });
 document.dispatchEvent(event);</pre>
 
@@ -223,6 +228,10 @@ document.dispatchEvent(event);</pre>
     <h2>Notify when message is sent</h2>
 
     <p>
+        Deepdesk needs to know when a message is sent for analytics purposes.
+    </p>
+
+    <p>
         We propose utilizing DOM events to notify the plugin when the submit process is started and to notify the plugin when the message is succesfully sent.
         These events have to be emitted from the input element itself.
 
@@ -289,7 +298,7 @@ textareaElement.dispatchEvent(new Event('ConversationMessageSent'));</pre>
 
     <h2>Contact</h2>
 
-    <p>If you have any questions or comments, feel free to get in touch! <a href="mailto:hello@deepdesk.com">hello@deepdesk.com</a></a></p>
+    <p>If there are events you would like to receive updates for, or any other questions or comment, feel free to get in touch! <a href="mailto:hello@deepdesk.com">hello@deepdesk.com</a></a></p>
 
     <br />
     <br />
