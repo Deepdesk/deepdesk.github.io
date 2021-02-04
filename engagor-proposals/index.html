@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagor proposals</title>
+    <link href="./styles.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Deepdesk plugin integration proposals</h1>
+
+    <h2>Introduction</h2>
+
+    <p>
+        The Deepdesk plugin empowers agents with AI by giving real-time suggestions above the agent's input field.
+        In order to function properly the plugin needs the following information:
+    </p>
+
+    <ol>
+        <li>Reference to the input field</li>
+        <li>Case Id</li>
+        <li>Notification when the typed message is sent</li>
+    </ol>
+
+    <p>
+        Although all information is now derived from the <code>DOM</code>, <code>window</code>-object or <code>location</code>-object,
+        without a proper "contract" this strategy is vulnerable to changes.
+    </p>
+
+    <p>
+        We have several proposals to make this more solid.
+    </p>
+
+    <ol>
+        <li>Reference to the input field (proposal 1 or proposal 2)</li>
+        <li>Case Id (proposal 1 or proposal 2)</li>
+        <li>Notification when the typed message is sent (proposal 3)</li>
+    </ol>
+
+    <h2>Proposal 1</h2>
+
+    <p>
+        In order to initiate the plugin with the proper case id and correct input element, we propose utilizing Custom DOM events.
+    </p>
+
+    <p>
+        When a case thread is done rendering in the DOM, we suggest Engagor triggering a CustomEvent named 'CaseLoaded' event on the <code>document</code> with the following payload:
+
+        <pre>const event = new CustomEvent('CaseLoaded', {
+    caseId: "XXXXXXXX",
+    inputElementId: "YYYY",
+});
+document.dispatchEvent(event);</pre>
+
+        <p>
+            See <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">Creating and triggering events</a> for details.
+        </p>
+    </p>
+
+    <p>
+        The plugin can listen to the 'CaseLoaded' event and attach itself to the provided input element and provide suggestings in the context of the provided case id.
+    </p>
+
+    <h3>Proof of concept</h3>
+
+    <table>
+        <tbody>
+            <tr>
+                <td width="50%" valign="top">
+                    <h4>Agent chat</h4>
+                    <button id="button1">Load case</button>
+                    <br />
+                    <div id="chat1"></div>
+                </td>
+                <td width="50%" valign="top">
+                    <h4>Plugin log</h4>
+                    <pre id="log1"></pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function log(target, text) {
+            document.getElementById(target).appendChild(document.createTextNode(text + '\n'));
+        }
+    </script>
+
+    <!-- Engagor -->
+    <script>
+        // Dummy Engagor code
+        function loadCase1() {
+            const root = document.getElementById('chat1');
+            root.innerHTML = 'loading...';
+
+            setTimeout(() => {
+                const caseId = Math.round(Math.random() * 100000);
+
+                root.innerHTML = `
+                    <div>
+                        <div>Case id: ${caseId}</div>
+                        <textarea id="${caseId}"></textarea>
+                        <button type="submit">Submit</button>
+                    </div>
+                `;
+
+                const event = new CustomEvent('CaseLoaded', {
+                    detail: {
+                        caseId: caseId,
+                        inputElementId: caseId,
+                    }
+                });
+                document.dispatchEvent(event);
+            }, 500);
+        };
+
+        document.getElementById('button1').addEventListener('click', loadCase1);
+    </script>
+
+    <!-- Deepdesk plugin -->
+    <script>
+        // Dummy Plugin code
+        document.addEventListener('CaseLoaded', function (event) {
+            log('log1', `New input detected with case id ${event.detail.caseId}`);
+        }, false);
+
+    </script>
+
+    <h2>Proposal 2</h2>
+
+    <p>
+        Instead of using custom events, Engagor can set a data attribute on an agents input element containing the case id. Eg. <code>data-autocomplete-case-id="XXXXXXXX"</code>.
+    </p>
+
+    <p>
+        Detecting an inserted input element (textarea/contenteditable div) with the specified data attribute is trivial for the plugin using the strategy <a href="https://davidwalsh.name/detect-node-insertion">described here</a>.
+    </p>
+
+    <h3>Proof of concept</h3>
+
+    <table>
+        <tbody>
+            <tr>
+                <td width="50%" valign="top">
+                    <h4>Agent chat</h4>
+                    <button id="button2">Load case</button>
+                    <br />
+                    <div id="chat2"></div>
+                </td>
+                <td width="50%" valign="top">
+                    <h4>Plugin log</h4>
+                    <pre id="log2"></pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Engagor -->
+    <script>
+        // Dummy Engagor code
+        function loadCase2() {
+            const root = document.getElementById('chat2');
+            root.innerHTML = 'loading...';
+
+            setTimeout(() => {
+                const caseId = Math.round(Math.random() * 100000);
+
+                root.innerHTML = `
+                    <div>
+                        <div>Case id: ${caseId}</div>
+                        <textarea data-autocomplete-case-id="${caseId}"></textarea>
+                        <button type="submit">Submit</button>
+                    </div>
+                `;
+            }, 500);
+        };
+
+        document.getElementById('button2').addEventListener('click', loadCase2);
+    </script>
+
+    <!-- Deepdesk plugin -->
+    <style>
+        @keyframes agentInputInserted {
+            from { opacity: 0.99; }
+            to { opacity: 1; }
+        }
+
+        [data-autocomplete-case-id] {
+            animation-duration: 0.001s;
+            animation-name: agentInputInserted;
+        }
+    </style>
+    <script>
+        // Dummy Plugin code
+        document.addEventListener("animationstart", event => {
+            if (event.animationName == "agentInputInserted") {
+                log('log2', `New input detected with case id ${event.target.dataset.autocompleteCaseId}`);
+            }
+        }, false);
+
+    </script>
+
+    <h2>Proposal 3</h2>
+
+    <p>
+        Proposal 1 and 2 provide the plugin with a case id and a reference to the agent's input element.
+        In proposal 3 we propose a way to notify the plugin when a agent submits a message.
+    </p>
+
+    <p>
+        We propose utilizing Custom DOM events to notify the plugin when the submit process is started and to notify the plugin when the message is succesfully sent.
+        These events have to be emitted from the input element itself.
+
+        <pre>/* Agent submits message by Enter or by clicking the submit button: */
+textareaElement.dispatchEvent(new Event('MessageSubmit'));
+
+/* Engagor does stuff */
+
+/* When message is sent successfully: */
+textareaElement.dispatchEvent(new Event('MessageSent'));</pre>
+    </p>
+
+    <h3>Proof of concept</h3>
+
+    <table>
+        <tbody>
+            <tr>
+                <td width="50%" valign="top">
+                    <h4>Agent chat</h4>
+                    <br />
+                    <div id="chat3">
+                        <div>
+                            <div>Case id: 123456</div>
+                            <textarea id="123456"></textarea>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </div>
+                </td>
+                <td width="50%" valign="top">
+                    <h4>Plugin log</h4>
+                    <pre id="log3"></pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Dummy Engagor code
+        const textareaElement = document.getElementById('123456');
+        const buttonElement = textareaElement.nextElementSibling;
+
+        buttonElement.addEventListener('click', async () => {
+            textareaElement.dispatchEvent(new Event('MessageSubmit'));
+
+            /* Engagor does stuff */
+            textareaElement.value = '';
+            await new Promise(resolve => setTimeout(resolve, 500));
+            /* Engagor does stuff */
+
+            textareaElement.dispatchEvent(new Event('MessageSent'));
+        });
+
+        // Dummy Plugin code
+        textareaElement.addEventListener('MessageSubmit', (event) => {
+            log('log3', `Message is submitted for case 123456`);
+        });
+        textareaElement.addEventListener('MessageSent', (event) => {
+            log('log3', `Message is successfully sent for case 123456`);
+        });
+
+    </script>
+</body>
+</html>
