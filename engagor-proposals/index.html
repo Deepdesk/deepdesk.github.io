@@ -47,8 +47,8 @@
         When a case thread is done rendering in the DOM, we suggest Engagor triggering a CustomEvent named 'CaseLoaded' event on the <code>document</code> with the following payload:
 
         <pre>const event = new CustomEvent('CaseLoaded', {
-    caseId: "XXXXXXXX",
-    inputElementId: "YYYY",
+    caseId: "XXXXXXXX", // case id
+    inputElementId: "YYYY", // element id of textarea or contenteditable div
 });
 document.dispatchEvent(event);</pre>
 
@@ -129,7 +129,7 @@ document.dispatchEvent(event);</pre>
     <h2>Proposal 2</h2>
 
     <p>
-        Instead of using custom events, Engagor can set a data attribute on an agents input element containing the case id. Eg. <code>data-autocomplete-case-id="XXXXXXXX"</code>.
+        Instead of using custom events suggested in proposal 1, Engagor can set a data attribute on an agents input element containing the case id. Eg. <code>data-autocomplete-case-id="XXXXXXXX"</code>.
     </p>
 
     <p>
@@ -204,7 +204,7 @@ document.dispatchEvent(event);</pre>
 
     <p>
         Proposal 1 and 2 provide the plugin with a case id and a reference to the agent's input element.
-        In proposal 3 we propose a way to notify the plugin when a agent submits a message.
+        In proposal 3 we propose a way to notify the plugin when an agent submits a message.
     </p>
 
     <p>
