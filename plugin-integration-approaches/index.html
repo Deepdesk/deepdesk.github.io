@@ -9,45 +9,55 @@
 <body>
     <h1>Deepdesk Chrome Extension integration</h1>
 
+    <br />
+
     <h2>Introduction</h2>
 
     <p>
         The <a href="https://chrome.google.com/webstore/detail/deepdesk/hjdmbhjhcbljokakbbpcnjeoppohgeke" target="_blank">Deepdesk Chrome Extension</a> empowers agents with AI by giving real-time suggestions above the agent's input field during a conversation.
     </p>
 
+    <img src="image.png" alt="Example of Deepdesk Chrome Extension in use" />
+
     <p>
-        In order to function properly the Deepdesk Chrome Extension needs the following information:
+        In order to function properly the Deepdesk Chrome Extension (herein after, plugin) needs the following information:
     </p>
 
     <ol>
         <li>Reference to the input field</li>
         <li>Conversation ID (a.k.a. Case ID)</li>
-        <li>Notification when the typed message is sent</li>
+        <li>Notification when message is sent</li>
     </ol>
 
     <p>
-        Although all information can be derived from the <code>DOM</code>, <code>Events</code>, <code>window</code> or <code>location</code>,
-        without a proper "contract" this strategy is vulnerable to changes.
+        Although all information can be derived from the platform's <code>DOM</code> and <code>window</code>-object,
+        this approach is not reliable and vulnerable to changes.
     </p>
 
     <p>
-        Below we describe several approaches to make to Deepdesk Chrome Extension integration more solid.
+        Below we describe several approaches to make the plugin less dependent on a platform's implementation details.
     </p>
+
+    <br />
 
     <h2>Reference to input element and a conversation ID</h2>
 
     <p>
-        In order to provide the Deepdesk Chrome Extension with a reference to the input element and a conversation ID we suggest providing the following data attribute on the agents input element containing the conversation ID:
+        Multiple conversations can run simultaneously. In order for the plugin to display suggestions at the correct input element, the plugin needs a reference to the input element, and the conversation ID this element belongs to.
+    </p>
+
+    <p>
+        We suggest adding the following data attribute to the agents input element containing the conversation ID:
     </p>
 
     <pre>data-autocomplete-conversation-id="XXXXXXXX"</pre>
 
     <p>
-        The Deepdesk Chrome Extension can detect when an element with the data attribute is added to the page and attach itself to it and provide suggestings in the context of the provided conversation ID.
+        This way the plugin can detect when an element with the data attribute is added to the page and attach itself to it and provide suggestings in the context of the provided conversation ID.
     </p>
 
     <p>
-        Detecting an inserted input element (textarea/contenteditable div) is trivial for the Deepdesk Chrome Extension using the strategy <a href="https://davidwalsh.name/detect-node-insertion" target="_blank">described here</a>.
+        Detecting an inserted input element (textarea/contenteditable div) is trivial for the plugin which uses the strategy <a href="https://davidwalsh.name/detect-node-insertion" target="_blank">described here</a>.
         You can also inspect the source code of the proof of concept below.
     </p>
 
@@ -93,7 +103,7 @@
         document.getElementById('button2').addEventListener('click', loadCase2);
     </script>
 
-    <!-- Deepdesk Chrome Extension -->
+    <!-- plugin -->
     <style>
         @keyframes agentInputInserted {
             from { opacity: 0.99; }
@@ -115,10 +125,12 @@
 
     </script>
 
+    <br />
+
     <h2>Reference to input element and a conversation ID (alt)</h2>
 
     <p>
-        An alternative method to provide the Deepdesk Chrome Extension with a reference to the input element and to provide the conversation ID is to utilize Custom DOM events.
+        An alternative method to provide the plugin with a reference to the input element and to provide the conversation ID is to utilize Custom DOM events.
     </p>
 
     <p>
@@ -133,7 +145,7 @@ document.dispatchEvent(event);</pre>
     </p>
 
     <p>
-        The Deepdesk Chrome Extension can listen to the 'ConversationLoaded' event and attach itself to the provided input element and provide suggestings in the context of the provided conversation ID.
+        The plugin can listen to the 'ConversationLoaded' event and attach itself to the provided input element and provide suggestings in the context of the provided conversation ID.
     </p>
 
     <p>
@@ -197,7 +209,7 @@ document.dispatchEvent(event);</pre>
         document.getElementById('button1').addEventListener('click', loadCase1);
     </script>
 
-    <!-- Deepdesk Chrome Extension -->
+    <!-- plugin -->
     <script>
         // Dummy Plugin code
         document.addEventListener('ConversationLoaded', function (event) {
@@ -206,10 +218,12 @@ document.dispatchEvent(event);</pre>
 
     </script>
 
-    <h2>Notify when the typed message is sent</h2>
+    <br />
+
+    <h2>Notify when message is sent</h2>
 
     <p>
-        We propose utilizing DOM events to notify the Deepdesk Chrome Extension when the submit process is started and to notify the Deepdesk Chrome Extension when the message is succesfully sent.
+        We propose utilizing DOM events to notify the plugin when the submit process is started and to notify the plugin when the message is succesfully sent.
         These events have to be emitted from the input element itself.
 
         <pre>/* Agent submits message by Enter or by clicking the submit button: */
@@ -270,5 +284,14 @@ textareaElement.dispatchEvent(new Event('ConversationMessageSent'));</pre>
         });
 
     </script>
+
+    <br />
+
+    <h2>Contact</h2>
+
+    <p>If you have any questions or comments, feel free to get in touch! hello@deepdesk.com</p>
+
+    <br />
+    <br />
 </body>
 </html>
