@@ -70,7 +70,8 @@ steps:
       - '-c'
       - |
           mv out docs
-          git checkout -b gh-pages
+          git branch -f gh-pages HEAD
+          git checkout gh-pages
           git add ./docs
           git commit -m "chore: deploy"
           git remote set-url origin git@github.com:Deepdesk/deepdesk.github.io.git
