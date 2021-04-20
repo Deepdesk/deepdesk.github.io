@@ -2,7 +2,7 @@
 export default {
   repository: "https://github.com/Deepdesk/deepdesk.github.io", // project repo TODO
   docsRepository: "https://github.com/Deepdesk/deepdesk.github.io", // docs repo
-  branch: "master", // branch of docs
+  branch: "main", // branch of docs
   path: "/", // path of docs
   titleSuffix: " – Deepdesk",
   nextLinks: true,
