@@ -69,9 +69,9 @@ steps:
     args:
       - '-c'
       - |
-          mv out gp-pages
+          mv out docs
           git checkout -b gh-pages
-          git add ./gp-pages
+          git add ./docs
           git commit -m "chore: deploy"
           git remote set-url origin git@github.com:Deepdesk/deepdesk.github.io.git
           git push -u origin gh-pages --force
