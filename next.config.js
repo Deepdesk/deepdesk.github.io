@@ -3,4 +3,9 @@ const withNextra = require('nextra')({
     themeConfig: './theme.config.js',
 });
 
-module.exports = withNextra();
+module.exports = withNextra({
+    webpack(config) {
+        config.plugins.pop();
+        return config;
+    }
+});
