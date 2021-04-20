@@ -1,0 +1,84 @@
+steps:
+  # Get npm token
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          echo "//npm.pkg.github.com/:_authToken=$(gcloud secrets versions access latest --secret=github_npm_access_token)" > /root/.npmrc
+    volumes:
+      - name: 'root-home'
+        path: /root
+
+  # Install dependencies
+  - name: node
+    entrypoint: yarn
+    args: ['install']
+    env:
+      - HOME=/root/
+    volumes:
+      - name: 'root-home'
+        path: /root
+
+  # Run unit tests
+  - name: node
+    entrypoint: yarn
+    args: ['build']
+
+  # Compile code
+  - name: node
+    entrypoint: yarn
+    args: ['export']
+
+  # Get and store GitHub private key
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+          mkdir /root/.ssh
+          gcloud secrets versions access latest --secret=github_ci_private_key > /root/.ssh/id_github
+    volumes:
+      - name: 'root-home'
+        path: /root
+
+  # Configre git credentials
+  - name: gcr.io/cloud-builders/git
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          # github ssh auth
+          chmod 600 /root/.ssh/id_github
+          cat <<EOF >/root/.ssh/config
+          Hostname github.com
+          IdentityFile /root/.ssh/id_github
+          EOF
+          ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+
+          # set git user (saved in /root/.gitconfig)
+          git config --local user.name deepdesk-github-ci
+          git config --local user.email github-ci@deepdesk.com
+    volumes:
+      - name: 'root-home'
+        path: /root
+
+  # Push output to ph-pages branch
+  - name: gcr.io/cloud-builders/git
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+          mv out docs
+          touch docs/.nojekyll
+          git branch -f gh-pages HEAD
+          git checkout gh-pages
+          git add ./docs
+          git commit -m "chore: deploy"
+          git remote set-url origin git@github.com:Deepdesk/deepdesk.github.io.git
+          git push -u origin gh-pages --force
+    volumes:
+      - name: 'root-home'
+        path: /root
+
+logsBucket: 'gs://deepdesk-build-logs'
