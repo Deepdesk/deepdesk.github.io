@@ -12,7 +12,7 @@ Each feature (eg. suggestions overlay) can take a custom styles object of which 
 
 Example of passing class names to the suggestions overlay components using BEM notation.
 
-```
+```js
 const customStyles = {
     SuggestionsOverlay: {
         root: 'MySuggestionsOverlay',
@@ -56,7 +56,7 @@ const customStyles = {
 
 The custom styles object is passed as argument when mounting the Deepdesk SDK:
 
-```
+```js
 deepdeskSDK.mount(inputElement, {
     suggestionsOverlay: {
         customStyles: customStyles
@@ -68,7 +68,7 @@ deepdeskSDK.mount(inputElement, {
 
 Example of passing class names to the tab completion components using BEM notation.
 
-```
+```js
 const customStyles = {
     KeyboardHint: {
         root: 'MyKeyboardHint',
@@ -88,7 +88,7 @@ const customStyles = {
 
 The custom styles object is passed as argument when mounting the Deepdesk SDK:
 
-```
+```js
 deepdeskSDK.mount(inputElement, {
     tabCompletion: {
         customStyles: customStyles
