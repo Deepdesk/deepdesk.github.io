@@ -1,5 +1,5 @@
 {
-    "deepdesk-api": "DeepdeskAPI",
     "deepdesk-sdk": "DeepdeskSDK",
+    "deepdesk-api": "DeepdeskAPI",
     "input-mediator": "InputMediator"
 }

@@ -15,15 +15,15 @@ export default {
   footerEditOnGitHubLink: true, // will link to the docs repo
   logo: (
     <>
-      <span className="mr-2 font-extrabold hidden md:inline">Deepdesk</span>
-      <span>Docs</span>
+      <span className="mr-2 font-extrabold hidden md:inline"><img src="/logo.png" alt="Deepdesk logo" /></span>
+      <span>Documentation</span>
     </>
   ),
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="description" content="Deepdesk - Contact Center AI" />
-      <meta name="og:title" content="Deepdesk - Contact Center AI" />
+      <meta name="description" content="Deepdesk Docs" />
+      <meta name="og:title" content="Deepdesk Docs" />
     </>
   ),
 };
