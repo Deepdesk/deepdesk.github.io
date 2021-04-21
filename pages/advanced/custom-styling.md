@@ -8,7 +8,7 @@ The Deepdesk SDK offers a simpel interface which allows you to extend the class 
 
 Each feature (eg. suggestions overlay) can take a custom styles object of which the keys are the component names.
 
-### Suggestions list
+### Suggestions overlay
 
 Example of passing class names to the suggestions overlay components using BEM notation.
 
