@@ -22,11 +22,21 @@ await deepdeskSDK.createConversation({
 });
 
 // Or, retrieve an existing conversation
-// by platform's conversation/thread/case identifier
+// by platform's conversation/thread/case identifier.
 await deepdeskSDK.getConversationBySessionId('123');
 
-// Mount the instance on the input element
-// The SDK will render the tab completion and suggestions overlay
+// Start listening for actions from the SDK to use.
+deepdeskSDK.on('select-text-suggestion', suggestion => {
+    inputElement.value = suggestion.text;
+});
+
+deepdeskSDK.on('reset', suggestion => {
+    inputElement.value = suggestion.text;
+});
+
+// Mount the instance on the input element.
+// The SDK will render the tab completion and suggestions overlay.
+// And it will start listening to events.
 deepdeskSDK.mount(inputElement);
 ```
 
@@ -37,5 +47,5 @@ Because the SDK can't realiably determine when the agent submits a message, the 
 ```jsx
 // After an agent successfully submit's a message,
 // but before the text input is emptied.
-deepdeskSDK.notifyAgentSubmit();
+deepdeskSDK.notifySubmit();
 ```
