@@ -16,7 +16,7 @@ export default {
   logo: (
     <>
       <span className="mr-2 font-extrabold hidden md:inline"><img src="/logo.png" alt="Deepdesk logo" /></span>
-      <span>Documentation</span>
+      <span>JS SDK Documentation</span>
     </>
   ),
   head: (
