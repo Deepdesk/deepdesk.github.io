@@ -59,7 +59,7 @@ The custom styles object is passed as argument when mounting the Deepdesk SDK:
 ```js
 deepdeskSDK.mount(inputElement, {
     suggestionsOverlay: {
-        customStyles: customStyles
+        customStyles
     }
 });
 ```
@@ -91,7 +91,7 @@ The custom styles object is passed as argument when mounting the Deepdesk SDK:
 ```js
 deepdeskSDK.mount(inputElement, {
     tabCompletion: {
-        customStyles: customStyles
+        customStyles
     }
 });
 ```

@@ -19,7 +19,7 @@
 4. Install the Deepdesk SDK npm package which comes with TypeScript support.
 
 ```bash
-npm install @deepdesk/deepdesk-sdk@5.0.0-alpha.10
+npm install @deepdesk/deepdesk-sdk
 ```
 
 5. Use the DeepdeskSDK in your code
