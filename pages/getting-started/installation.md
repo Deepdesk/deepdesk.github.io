@@ -2,7 +2,7 @@
 
 ### Install via NPM
 
-1. Contact info@deepdesk.com for an access token for our private npm registry on GitHub.
+1. Contact support@deepdesk.com for an access token for our private npm registry on GitHub.
 
 2. Add the token to your `~/.npmrc` in **your home directory**:
 
@@ -16,10 +16,10 @@
 @deepdesk:registry=https://npm.pkg.github.com
 ```
 
-4. Install the Deepdesk SDK npm package which comes with TypeScript support.
+4. Install the Deepdesk SDK npm package together with React
 
 ```bash
-npm install @deepdesk/deepdesk-sdk
+npm install @deepdesk/deepdesk-sdk react react-dom
 ```
 
 5. Use the DeepdeskSDK in your code

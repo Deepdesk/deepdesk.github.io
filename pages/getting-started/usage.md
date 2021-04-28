@@ -6,8 +6,10 @@ Instantiate the Deepdesk SDK and mount it on the agent's textarea in the custome
 
 ```jsx
 // Instantiate the Deepdesk SDK
+// With <accountname>.deepdesk.com
+// OR <accountname>.staging.deepdesk.com.
 const deepdeskSDK = new DeepdeskSDK({
-    deepdeskUrl: 'https://acme.deepdesk.com/api',
+    deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
 });
 
 // Create a new conversation
@@ -33,13 +35,11 @@ deepdeskSDK.on('reset', suggestion => {
     inputElement.value = suggestion.text;
 });
 
-// Get a reference to the agent's input element.
-const inputElement = document.getElementById('textarea');
-
 // Mount the instance on the input element.
+// Should be after async `createConversation` or `getConversationBySessionId`
 // The SDK will render the tab completion and suggestions overlay.
 // And it will start listening to events.
-deepdeskSDK.mount(inputElement);
+deepdeskSDK.mount(document.getElementById('textarea'));
 ```
 
 ### Notify message submit
