@@ -24,6 +24,9 @@ await deepdeskSDK.createConversation({
 // by platform's conversation/thread/case identifier.
 await deepdeskSDK.getConversationBySessionId('123');
 
+// Get a reference to the agent's input element.
+const inputElement = document.getElementById('textarea');
+
 // Update the input field when user selects a suggestion.
 // See 'Api Reference' > 'DeepdeskSDK' for more events.
 deepdeskSDK.on('select-text-suggestion', suggestion => {
@@ -39,7 +42,7 @@ deepdeskSDK.on('reset', suggestion => {
 // Should be after async `createConversation` or `getConversationBySessionId`
 // The SDK will render the tab completion and suggestions overlay.
 // And it will start listening to events.
-deepdeskSDK.mount(document.getElementById('textarea'));
+deepdeskSDK.mount(inputElement);
 ```
 
 ### Notify message submit
