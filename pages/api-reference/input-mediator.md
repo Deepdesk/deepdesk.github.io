@@ -4,6 +4,10 @@ The InputMediator is a class that is used under the hood when mounting the Deepd
 
 The purpose of the InputMediator is to provide a consistent interface for the SDK to talk to the input element.
 
+```
+DeepdeskSDK <-> InputMediator <-> platform input
+```
+
 The DeepdeskSDK ships with two InputMediator types:
  * TextAreaInput (for `<textarea />` elements)
  * ContentEditableInput (for `<div contenteditable="true" />` elements)
@@ -49,7 +53,10 @@ abstract class InputMediator<HTMLElementType extends HTMLElement> {
     abstract getHTML(): string;
 
     /*
-     * Get the raw html from the input element
+     * Wrapper around a callback function which changes the contents of the input element.
+     * The callback is invoked immediatly.
+     * This method should prevent applied changes to bubble up as user changes.
+     * This methos is also responsible for repositioning the typing cursor.
      * To be implemented in inheriting class
      */
     abstract applyChanges(callback: (element: HTMLElementType) => void): void;
