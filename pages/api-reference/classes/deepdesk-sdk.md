@@ -1,6 +1,6 @@
-# DeepdeskSDK
+# DeepdeskSDK Class
 
-### DeepdeskSDK Class
+### Overview
 
 ```ts
 class DeepdeskSDK {
@@ -31,13 +31,13 @@ class DeepdeskSDK {
 
     /**
      * Store the visitor information in memory
-     * Used to extract information for text placeholders
+     * Is used to extract information for text placeholders
      */
     setVisitorInfo(visitorInfo: VisitorInfo): void;
 
     /**
      * Store the agent information in memory
-     * Used to extract information for text placeholders
+     * Is used to extract information for text placeholders
      */
     setAgentInfo(agentInfo: AgentInfo): void;
 
@@ -67,6 +67,7 @@ class DeepdeskSDK {
 
     /**
      * Method to call when the agent has sent a message to the visitor
+     * Sends an analytics event to Deepdesk.
      */
     notifySubmit(): void;
 

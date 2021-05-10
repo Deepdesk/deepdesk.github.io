@@ -1,4 +1,4 @@
-# InputMediator
+# InputMediator Class
 
 The InputMediator is a class that is used under the hood when mounting the DeepdeskSDK on an input element.
 
@@ -26,7 +26,7 @@ deepdeskSDK.mount(element, {
 });
 ```
 
-### InputMediator Class
+### Overview
 
 ```ts
 abstract class InputMediator<HTMLElementType extends HTMLElement> {

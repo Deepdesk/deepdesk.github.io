@@ -1,3 +1,0 @@
-# DeepdeskAPI
-
-Comming soon...
