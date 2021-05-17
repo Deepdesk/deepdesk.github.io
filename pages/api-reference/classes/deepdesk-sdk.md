@@ -109,3 +109,103 @@ class DeepdeskSDK {
      */
     renderWidget(containerElement: HTMLElement, options?: WidgetOptions): void;
 ```
+
+### `constructor`
+
+```ts
+new DeepdeskSDK(config: SDKConfig);
+```
+
+```ts
+interface SDKConfig {
+    /**
+     * Base API URL for the Deepdesk backend,
+     * e.g. https://acme.deepdesk.com/api
+     */
+    deepdeskUrl: string;
+
+    /**
+     * Optional base url for the Deepdesk broker backend
+     * e.g. https://acme.deepdesk.com/broker/api
+     */
+    brokerUrl?: string;
+
+    /**
+     * Set the language for all the UI labels.
+     * Note: This has no effect on the language of the suggestions!
+     * Default: en_US
+     */
+    locale?: 'en_US' | 'nl_NL';
+
+    /**
+     * Optional jwt token for Authorization: Bearer <...> header.
+     * This is an alternative to the preferred SSO implementation.
+     * Contact support@deepdesk.com for how to obtain a token.
+     */
+    token?: string;
+}
+```
+
+### `createConversation`
+
+Create or get conversation based on unique sessionId/agentId/channel/platform signature.
+
+**Note:** Only use this method when there is no backend integration possible. The preferred route is to implement the Deepdesk backend webhooks for notifying Deepdesk of new messages (thus creating the conversation in the backend) and using `getConversationBySessionId` in the front end to get de correct conversation.
+
+```ts
+deepdeskSDK.createConversation(options: CreateConversationOptions);
+```
+
+```ts
+interface CreateConversationOptions {
+    /**
+     * The platform's conversation/thread/case ID.
+     */
+    sessionId: string;
+
+    /**
+     * The platform's agent ID
+     */
+    agentId: string;
+
+    /**
+     * The channel, e.g. 'chat', or 'messaging/facebook'
+     */
+    channel: string;
+
+    /**
+     * The messaging platform, e.g. 'liveengage'
+     */
+    platform: string;
+
+    /**
+     * Optional client profile code, e.g. 'b2b' or 'b2c'
+     */
+    profileCode?: string;
+}
+```
+
+### `getConversationBySessionId`
+
+Get the current conversation created by the Deepdesk backend via the Deepdesk webhooks.
+
+Optionally add polling options when you are not sure if the webhook received the message in time.
+
+```ts
+deepdeskSDK.getConversationBySessionId(sessionId: string, options?: GetConversationBySessionIdOptions);
+```
+
+```ts
+interface GetConversationBySessionIdOptions {
+    /**
+     * Number of attempts in the case the conversation is not created yet via the Deepdesk webhook.
+     */
+    attempts?: number;
+
+    /**
+     * Delay between attempts in miliseconds
+     * Default: 1000(ms)
+     */
+    retryDelay?: number;
+}
+```

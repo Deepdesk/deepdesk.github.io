@@ -13,7 +13,7 @@
 const formElement = document.getElementById('form');
 const inputElement = document.getElementById('input');
 const deepdeskSDK = new DeepdeskSDK({
-    deepdeskUrl: 'https://<account>.deepdesk.com/api',
+    deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
 });
 
 deepdeskSDK
@@ -53,15 +53,13 @@ const ControlledTextarea = () => {
 
     useEffect(() => {
         const deepdeskSDK = new DeepdeskSDK({
-            deepdeskUrl: 'https://<account>.deepdesk.com/api',
+            deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
         });
 
         deepdeskSDK
-            .createConversation({
-                platform: 'example', // name of platform
-                channel: 'chat', // chat, messaging
-                sessionId: '123', // platform's conversation identifier
-                agentId: '123', // platform's agent identifier
+            .getConversationBySessionId('123', {
+                attempts: 5,
+                retryDelay: 500,
             })
             .then(() => {
                 deepdeskSDK.mount(ref.current);
@@ -109,18 +107,16 @@ const DraftJSInput = () => {
 
     useEffect(() => {
         const deepdeskSDK = new DeepdeskSDK({
-            deepdeskUrl: 'https://<account>.deepdesk.com/api',
+            deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
         });
 
         deepdeskSDK
-            .createConversation({
-                platform: 'example', // name of platform
-                channel: 'chat', // chat, messaging
-                sessionId: '123', // platform's conversation identifier
-                agentId: '123', // platform's agent identifier
+            .getConversationBySessionId('123', {
+                attempts: 5,
+                retryDelay: 500,
             })
             .then(() => {
-                deepdeskSDK.mount(ref.current.firstChild);
+                deepdeskSDK.mount(ref.current);
             });
 
         deepdeskSDK.on('select-text-suggestion', suggestion => {
