@@ -16,7 +16,7 @@ Example of passing class names to the suggestions overlay components using BEM n
 const customStyles = {
     SuggestionsOverlay: {
         root: 'MySuggestionsOverlay',
-        hidden: 'MySuggestionsOverlay--hidden',
+        isCollapsed: 'MySuggestionsOverlay--hidden',
         collapsible: 'MySuggestionsOverlay__collapsible',
         toggleButton: 'MySuggestionsOverlay__toggleButton',
         hints: 'MySuggestionsOverlay__hints',
@@ -27,7 +27,7 @@ const customStyles = {
     },
     Suggestion: {
         root: 'MySuggestion',
-        selected: 'MySuggestion--selected',
+        isSelected: 'MySuggestion--selected',
         animationAppear: 'MySuggestion__animationAppear',
         animationAppearActive: 'MySuggestion__animationAppearActive',
         animationAppearDone: 'MySuggestion__animationAppearDone',
@@ -49,7 +49,7 @@ const customStyles = {
     },
     ToggleButton: {
         root: 'MyToggleButton',
-        flipVertical: 'MyToggleButton--flipVertical',
+        isCollapsed: 'MyToggleButton--isCollapsed',
     },
 };
 ```
