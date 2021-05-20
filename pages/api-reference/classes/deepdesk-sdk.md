@@ -209,3 +209,90 @@ interface GetConversationBySessionIdOptions {
     retryDelay?: number;
 }
 ```
+
+### `setVisitorInfo`
+
+Set visitor info, used for placeholder interpolation in the suggestions.
+
+```ts
+setVisitorInfo(visitorInfo: VisitorInfo): void;
+```
+
+```ts
+interface VisitorInfo {
+    /**
+     * Platform's visitor id
+     */
+    visitorId?: string;
+
+    /**
+     * Visitor name. Visitor first name is often what you want to show in the suggestions.
+     */
+    visitorName?: string;
+
+    /**
+     * Visitor e-mail
+     */
+    visitorEmail?: string;
+
+    /**
+     * Visitor postal code
+     */
+    visitorPostalCode?: string;
+
+    /**
+     * Visitor house number
+     */
+    visitorHouseNumber?: string;
+}
+```
+
+Placeholder replacements:
+
+```ts
+'{visitor_name}': visitorName,
+'{postal_code}': visitorPostalCode,
+'{street_number}': visitorHouseNumber,
+'{house_number}': visitorHouseNumber,
+'{postal_code_house_number}': `${visitorPostalCode} ${visitorHouseNumber}`,
+'{postal_code_street_number}': `${visitorPostalCode} ${visitorHouseNumber}`,
+'{subscription_name}': visitorName,
+```
+
+### `setAgentInfo`
+
+Set agent info, used for placeholder interpolation in the suggestions.
+
+```ts
+setAgentInfo(agentInfo: AgentInfo): void;
+```
+
+```ts
+interface AgentInfo {
+    /**
+     * Platform's agent id
+     */
+    agentId?: string;
+
+    /**
+     * Agent's nickname of first name
+     */
+    agentNickname?: string;
+
+    /**
+     * Agent's first name of full name
+     */
+    agentName?: string;
+
+    /**
+     * Agent's e-mail address
+     */
+    agentEmail?: string;
+};
+```
+
+Placeholder replacements:
+
+```ts
+'{agent_name}': agentNickname,
+```
