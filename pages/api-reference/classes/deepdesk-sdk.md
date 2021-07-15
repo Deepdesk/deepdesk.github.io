@@ -227,27 +227,33 @@ deepdeskSDK.mount(element: HTMLElement, options?: MountOptions);
 interface MountOptions {
     /*
      * Enable or disable the suggestions overlay, or enable it with custom options.
+     * Default: true
      */
     suggestionsOverlay?: boolean | SuggestionsOverlayOptions;
 
     /*
      * Enable or disable tab completion, or enable it with custom options.
+     * Default: true
      */
     tabCompletion?: boolean | TabCompletionOptions;
 
     /*
      * Advanced: Provide you own InputMediator class.
      * DeepdeskSDK <-> InputMediator <-> platform input
-     * Also see: https://deepdesk.github.io/api-reference/classes/input-mediator
+     * Default: Deepdesk's TextAreaInput or ContentEditableInput depended on mount element.
+     * See: https://deepdesk.github.io/api-reference/classes/input-mediator
      */
     InputMediator?: Constructable<InputMediator<HTMLElement>>;
 
     /*
-     * Instead of manually notifying the SDK when an agent submits a message (`DeepdeskSDK.notifySubmit()`), use `detectSubmit` to automatically detect when an agent submits a message.
+     * Automatically detect when an agent submits a message.
+     * Default: false
+     *
+     * Can be enabled instead of manually calling `DeepdeskSDK.notifySubmit()`.
      * Enabling this setting is discouraged, because it only works in ideal circumstances.
      * The algorithm assumes that if the textarea is cleared,
      * and it is not a result of user action (Delete, Backspace, Cut, etc.),
-     * The text in the textarea must have been submitted.
+     * the text in the textarea must have been submitted.
      */
     detectSubmit?: boolean;
 }
