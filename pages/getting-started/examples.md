@@ -10,22 +10,20 @@
 ```
 
 ```js
+import { DeepdeskSDK } from '@deepdesk/deepdesk-sdk';
+
 const formElement = document.getElementById('form');
 const inputElement = document.getElementById('input');
 const deepdeskSDK = new DeepdeskSDK({
     deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
 });
 
-deepdeskSDK
-    .createConversation({
-        platform: 'example', // name of platform
-        channel: 'chat', // chat, messaging
-        sessionId: '123', // platform's conversation identifier
-        agentId: '123', // platform's agent identifier
-    })
-    .then(() => {
-        deepdeskSDK.mount(inputElement);
-    });
+deepdeskSDK.getConversationBySessionId('123', {
+    attempts: 5,
+    retryDelay: 500,
+});
+
+deepdeskSDK.mount(inputElement);
 
 deepdeskSDK.on('select-text-suggestion', suggestion => {
     element.value = suggestion.text;
@@ -35,11 +33,16 @@ deepdeskSDK.on('reset', suggestion => {
     element.value = suggestion.text;
 });
 
-formElement.addEventListener('submit', event => {
+formElement.addEventListener('submit', async event => {
     event.preventDefault();
-    // Handle submit ...
+
+    await sendMessageToYourBackend(); // Handle submit ...
+
     deepdeskSDK.notifySubmit();
     element.value = '';
+
+    // Refresh suggestions
+    deepdeskSDK.refresh();
 });
 
 ```
@@ -47,6 +50,8 @@ formElement.addEventListener('submit', event => {
 ## React Textarea
 
 ```jsx
+import { DeepdeskSDK } from '@deepdesk/deepdesk-sdk';
+
 const ControlledTextarea = () => {
     const ref = useRef(null);
     const [value, setValue] = useState('');
@@ -56,14 +61,12 @@ const ControlledTextarea = () => {
             deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
         });
 
-        deepdeskSDK
-            .getConversationBySessionId('123', {
-                attempts: 5,
-                retryDelay: 500,
-            })
-            .then(() => {
-                deepdeskSDK.mount(ref.current);
-            });
+        deepdeskSDK.getConversationBySessionId('123', {
+            attempts: 5,
+            retryDelay: 500,
+        });
+
+        deepdeskSDK.mount(ref.current);
 
         deepdeskSDK.on('select-text-suggestion', suggestion => {
             setValue(suggestion.text);
@@ -74,11 +77,16 @@ const ControlledTextarea = () => {
         });
     }, []);
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        // Handle submit ...
+
+        await sendMessageToYourBackend(); // Handle submit ...
+
         deepdeskSDK.notifySubmit();
-        setValue('');
+        element.value = '';
+
+        // Refresh suggestions
+        deepdeskSDK.refresh();
     };
 
     return (
@@ -97,6 +105,7 @@ const ControlledTextarea = () => {
 ## React DraftJs
 
 ```jsx
+import { DeepdeskSDK } from '@deepdesk/deepdesk-sdk';
 import { ContentState, Editor, EditorState } from 'draft-js';
 
 const DraftJSInput = () => {
@@ -110,14 +119,12 @@ const DraftJSInput = () => {
             deepdeskUrl: 'https://<accountname>.deepdesk.com/api',
         });
 
-        deepdeskSDK
-            .getConversationBySessionId('123', {
-                attempts: 5,
-                retryDelay: 500,
-            })
-            .then(() => {
-                deepdeskSDK.mount(ref.current);
-            });
+        deepdeskSDK.getConversationBySessionId('123', {
+            attempts: 5,
+            retryDelay: 500,
+        });
+
+        deepdeskSDK.mount(ref.current);
 
         deepdeskSDK.on('select-text-suggestion', suggestion => {
             const content = ContentState.createFromText(suggestion.text);
@@ -130,11 +137,16 @@ const DraftJSInput = () => {
         });
     }, []);
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
-        // Handle submit ...
+
+        await sendMessageToYourBackend(); // Handle submit ...
+
         deepdeskSDK.notifySubmit();
-        setValue('');
+        element.value = '';
+
+        // Refresh suggestions
+        deepdeskSDK.refresh();
     };
 
     return (

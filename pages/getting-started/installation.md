@@ -16,7 +16,7 @@
 @deepdesk:registry=https://npm.pkg.github.com
 ```
 
-4. Install the Deepdesk SDK npm package together with React
+4. Install the Deepdesk SDK npm package together with React (Or Preact)
 
 ```bash
 npm install @deepdesk/deepdesk-sdk react react-dom

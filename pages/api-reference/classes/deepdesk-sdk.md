@@ -169,11 +169,6 @@ interface CreateConversationOptions {
     agentId: string;
 
     /**
-     * The channel, e.g. 'chat', or 'messaging/facebook'
-     */
-    channel: string;
-
-    /**
      * The messaging platform, e.g. 'liveengage'
      */
     platform: string;
