@@ -23,6 +23,15 @@ deepdeskSDK.getConversationBySessionId('123', {
     retryDelay: 500,
 });
 
+deepdeskSDK.setVisitorInfo({
+    visitorName: 'Anne',
+});
+
+deepdeskSDK.setAgentInfo({
+    agentName: 'Sam de Pam',
+    agentNickname: 'Sam',
+});
+
 deepdeskSDK.mount(inputElement);
 
 deepdeskSDK.on('select-text-suggestion', suggestion => {
@@ -64,6 +73,15 @@ const ControlledTextarea = () => {
         deepdeskSDK.getConversationBySessionId('123', {
             attempts: 5,
             retryDelay: 500,
+        });
+
+        deepdeskSDK.setVisitorInfo({
+            visitorName: 'Anne',
+        });
+
+        deepdeskSDK.setAgentInfo({
+            agentName: 'Sam de Pam',
+            agentNickname: 'Sam',
         });
 
         deepdeskSDK.mount(ref.current);
@@ -122,6 +140,15 @@ const DraftJSInput = () => {
         deepdeskSDK.getConversationBySessionId('123', {
             attempts: 5,
             retryDelay: 500,
+        });
+
+        deepdeskSDK.setVisitorInfo({
+            visitorName: 'Anne',
+        });
+
+        deepdeskSDK.setAgentInfo({
+            agentName: 'Sam de Pam',
+            agentNickname: 'Sam',
         });
 
         deepdeskSDK.mount(ref.current);
