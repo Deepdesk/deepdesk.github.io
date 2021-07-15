@@ -5,15 +5,20 @@
 ```ts
 class DeepdeskSDK {
     /**
-     * Deepdesks internal reference to the conversation
-     * Not to be confused with sessionId which is the platform's conversation identifier.
-     */
-    conversationId: number | null;
-
-    /**
      * Create an instance of the DeepdeskSDK for each conversation.
      */
     constructor(options: SDKOptions);
+
+    /**
+     * Get conversation id of current conversation.
+     * Throws an error when there is no conversation loaded yet.
+     */
+    conversationId(): number;
+
+    /**
+     * Check if a conversation is loaded.
+     */
+    hasConversation(): boolean;
 
     /**
      * Create a conversation and set the conversationId
@@ -44,12 +49,14 @@ class DeepdeskSDK {
     /**
      * Method to call when the conversation is updated, either by an incoming message
      * from the visitor, or a message sent by the agent.
-     * Usually this method is not needed, because messages are updates via the backend webhooks.
+     * Usually this method is not needed, because messages are updated via the backend webhooks. Only use this method when webhook implementation is not possible.
      */
-    updateConversationTranscript(transcriptPatch: Conversation['messages']): Promise<Conversation>;
+    updateTranscript(transcriptPatch: Conversation['messages']): Promise<Conversation>;
 
     /**
-     * Refresh suggestions based on the current conversation messages
+     * Refresh suggestions based on the current conversation messages.
+     * Use when agent or visitor has submitted a message and Deepdesk webhook is notified.
+     * Be carefull not to refresh suggestions when the agent is already typing.
      */
     refresh(): void;
 
@@ -126,6 +133,7 @@ interface SDKConfig {
 
     /**
      * Optional base url for the Deepdesk broker backend
+     * Only applicable if using autoflows or custom messages features.
      * e.g. https://acme.deepdesk.com/broker/api
      */
     brokerUrl?: string;
@@ -202,6 +210,92 @@ interface GetConversationBySessionIdOptions {
      * Default: 1000(ms)
      */
     retryDelay?: number;
+}
+```
+
+### `mount`
+
+Get the current conversation created by the Deepdesk backend via the Deepdesk webhooks.
+
+Optionally add polling options when you are not sure if the webhook received the message in time.
+
+```ts
+deepdeskSDK.mount(element: HTMLElement, options?: MountOptions);
+```
+
+```ts
+interface MountOptions {
+    /*
+     * Enable or disable the suggestions overlay, or enable it with custom options.
+     */
+    suggestionsOverlay?: boolean | SuggestionsOverlayOptions;
+
+    /*
+     * Enable or disable tab completion, or enable it with custom options.
+     */
+    tabCompletion?: boolean | TabCompletionOptions;
+
+    /*
+     * Advanced: Provide you own InputMediator class.
+     * DeepdeskSDK <-> InputMediator <-> platform input
+     * Also see: https://deepdesk.github.io/api-reference/classes/input-mediator
+     */
+    InputMediator?: Constructable<InputMediator<HTMLElement>>;
+
+    /*
+     * Instead of manually notifying the SDK when an agent submits a message (`DeepdeskSDK.notifySubmit()`), use `detectSubmit` to automatically detect when an agent submits a message.
+     * Enabling this setting is discouraged, because it only works in ideal circumstances.
+     * The algorithm assumes that if the textarea is cleared,
+     * and it is not a result of user action (Delete, Backspace, Cut, etc.),
+     * The text in the textarea must have been submitted.
+     */
+    detectSubmit?: boolean;
+}
+```
+
+```ts
+interface SuggestionsOverlayOptions {
+    /*
+     * Custom suggestion overlay styling
+     * See: https://deepdesk.github.io/advanced/custom-styling
+     */
+    customStyles?: SuggestionsOverlayCustomStyles;
+
+    /*
+     * Enable or disable a toggle button to collapse the suggestions
+     * Default: false
+     */
+    showToggleButton?: boolean;
+
+    /*
+     * Enable or disable hot keys (feature is broken at the moment)
+     * Default: false
+     */
+    // showHotKeys?: boolean;
+
+    /*
+     * Enable or disable "hide on blur"
+     * When enabled it only shows the suggestions overlay when the textarea is focused.
+     * Default: false
+     */
+    hideOnBlur?: boolean;
+
+    /*
+     * Enable or disable text suggestions or provide max. number of suggestions.
+     * Disabling makes no sence.
+     * Default: true
+     */
+    showTextSuggestions?: boolean | number;
+}
+```
+
+```ts
+interface TabCompletionOptions {
+    /*
+     * Custom tab completion styling
+     * See: https://deepdesk.github.io/advanced/custom-styling
+     */
+    customStyles?: TabCompletionCustomStyles;
 }
 ```
 
